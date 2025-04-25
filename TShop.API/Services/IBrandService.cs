@@ -9,7 +9,7 @@ namespace TShop.API.Services
         IEnumerable<Brand> GetAll();
         Brand? Get(Expression<Func<Brand, bool>> expression);
         Brand? Add(BrandRequest brandRequest);
-        bool Edit(int id, BrandRequest brandRequest);
+        bool Edit(int id, BrandUpdateRequest brandRequest);
         bool Remove(int id);
     }
 }

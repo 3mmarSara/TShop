@@ -34,7 +34,7 @@ namespace TShop.API.Services
             return null;
         }
 
-        public bool Edit(int id, BrandRequest brandRequest)
+        public bool Edit(int id, BrandUpdateRequest brandRequest)
         {
             var brandInDB = _context.Brands.AsNoTracking().FirstOrDefault(p => p.Id == id);
             if (brandInDB is null) return false;
@@ -58,12 +58,16 @@ namespace TShop.API.Services
                 }
 
                 updatedBrand.Logo = fileName;
-                updatedBrand.Id = id;
-                _context.Brands.Update(updatedBrand);
-                _context.SaveChanges();
-                return true;
             }
-            return false;
+            else
+            {
+                updatedBrand.Logo = brandInDB.Logo;
+            }
+
+            updatedBrand.Id = id;
+            _context.Brands.Update(updatedBrand);
+            _context.SaveChanges();
+            return true;
         }
 
         public Brand? Get(Expression<Func<Brand, bool>> expression)

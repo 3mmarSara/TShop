@@ -10,7 +10,7 @@ namespace TShop.API.Services
         Product? Get(Expression<Func<Product, bool>> expression);
 
         Product? Add(ProductRequest productRequest);
-        bool Edit(int id, ProductRequest productRequest);
+        bool Edit(int id, ProductUpdateRequest productRequest);
         bool Remove(int id);
     }
 }

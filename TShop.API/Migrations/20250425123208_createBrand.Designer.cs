@@ -11,8 +11,8 @@ using TShop.API.Data;
 namespace TShop.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250405205039_createBrands")]
-    partial class createBrands
+    [Migration("20250425123208_createBrand")]
+    partial class createBrand
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,7 +84,7 @@ namespace TShop.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BrandId")
+                    b.Property<int>("BrandId")
                         .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
@@ -96,6 +96,10 @@ namespace TShop.API.Migrations
 
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("MainImg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -113,10 +117,6 @@ namespace TShop.API.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<string>("mainImg")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
@@ -128,15 +128,19 @@ namespace TShop.API.Migrations
 
             modelBuilder.Entity("TShop.API.Models.Product", b =>
                 {
-                    b.HasOne("TShop.API.Models.Brand", null)
+                    b.HasOne("TShop.API.Models.Brand", "brand")
                         .WithMany("Products")
-                        .HasForeignKey("BrandId");
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TShop.API.Models.Category", "category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("brand");
 
                     b.Navigation("category");
                 });

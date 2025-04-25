@@ -45,9 +45,9 @@ namespace TShop.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute]int id, [FromForm]ProductRequest productRequest)
+        public IActionResult Update([FromRoute]int id, [FromForm]ProductUpdateRequest productRequest)
         {
-            return _productService.Edit(id, productRequest) ? NoContent() : BadRequest();
+            return _productService.Edit(id, productRequest) ? NoContent() : NotFound();
         }
 
 

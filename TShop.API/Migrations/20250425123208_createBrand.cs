@@ -5,16 +5,22 @@
 namespace TShop.API.Migrations
 {
     /// <inheritdoc />
-    public partial class createBrands : Migration
+    public partial class createBrand : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.RenameColumn(
+                name: "mainImg",
+                table: "Products",
+                newName: "MainImg");
+
             migrationBuilder.AddColumn<int>(
                 name: "BrandId",
                 table: "Products",
                 type: "int",
-                nullable: true);
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.CreateTable(
                 name: "Brands",
@@ -42,7 +48,8 @@ namespace TShop.API.Migrations
                 table: "Products",
                 column: "BrandId",
                 principalTable: "Brands",
-                principalColumn: "Id");
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
@@ -62,6 +69,11 @@ namespace TShop.API.Migrations
             migrationBuilder.DropColumn(
                 name: "BrandId",
                 table: "Products");
+
+            migrationBuilder.RenameColumn(
+                name: "MainImg",
+                table: "Products",
+                newName: "mainImg");
         }
     }
 }

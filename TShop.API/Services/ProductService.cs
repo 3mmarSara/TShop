@@ -24,7 +24,7 @@ namespace TShop.API.Services
                 {
                     file.CopyTo(stream);
                 }
-                product.mainImg = fileName;
+                product.MainImg = fileName;
                 _context.Products.Add(product);
                 _context.SaveChanges();
                 return product;
@@ -33,17 +33,17 @@ namespace TShop.API.Services
             return null;
         }
 
-        public bool Edit(int id, ProductRequest productRequest)
+        public bool Edit(int id, ProductUpdateRequest productRequest)
         {
             var productInDB = _context.Products.AsNoTracking().FirstOrDefault(p => p.Id == id);
             if (productInDB is null) return false;
 
             var updatedProduct = productRequest.Adapt<Product>();
-            var file = productRequest.mainImg;
+            var file = productRequest.MainImg;
 
             if (file != null && file.Length > 0)
             {
-                var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "images", productInDB.mainImg);
+                var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "images", productInDB.MainImg);
                 if (System.IO.File.Exists(oldPath))
                 {
                     System.IO.File.Delete(oldPath);
@@ -56,13 +56,17 @@ namespace TShop.API.Services
                     file.CopyTo(stream);
                 }
 
-                updatedProduct.mainImg = fileName;
-                updatedProduct.Id = id;
-                _context.Products.Update(updatedProduct);
-                _context.SaveChanges();
-                return true;
+                updatedProduct.MainImg = fileName;
             }
-            return false;
+            else
+            {
+                updatedProduct.MainImg = productInDB.MainImg;
+            }
+
+            updatedProduct.Id = id;
+            _context.Products.Update(updatedProduct);
+            _context.SaveChanges();
+            return true;
         }
 
         public Product? Get(Expression<Func<Product, bool>> expression)
@@ -80,7 +84,7 @@ namespace TShop.API.Services
             var product = _context.Products.Find(id);
             if (product is null) return false;
 
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "images", product.mainImg);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "images", product.MainImg);
             if (System.IO.File.Exists(filePath))
             {
                 System.IO.File.Delete(filePath);
