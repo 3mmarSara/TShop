@@ -74,9 +74,19 @@ namespace TShop.API.Services
             return _context.Products.FirstOrDefault(expression);
         }
 
-        public IEnumerable<Product> GetAll()
+        public IEnumerable<Product>? GetAll(string? query, int page, int limit)
         {
-            return [.. _context.Products];
+            IQueryable<Product> products = _context.Products;
+            if (page <= 0) page = 1;
+
+            if (limit <= 0) limit = 10;
+
+            if (query != null)
+                products = products.Where(p => (p.Name).Contains(query) || (p.Description).Contains(query));
+
+            products = products.Skip((page - 1) * limit).Take(limit);
+
+            return products;
         }
 
         public bool Remove(int id)

@@ -13,6 +13,7 @@ namespace TShop.API.DTOs.Requests
         public double Rate { get; set; }
         public bool Status { get; set; }
         public int CategoryId { get; set; }
+        public int BrandId { get; set; }
 
     }
 }

@@ -16,8 +16,8 @@ namespace TShop.API.Controllers
     {
         private readonly IProductService _productService = productService;
         [HttpGet]
-        public IActionResult GetAll() {
-            var products = _productService.GetAll();
+        public IActionResult GetAll([FromQuery] string? query, [FromQuery] int page = 1, [FromQuery] int limit = 10 ) {
+            var products = _productService.GetAll(query, page, limit);
             return products is null ? NotFound() : Ok(products.Adapt<IEnumerable<ProductResponse>>());
         }
 
